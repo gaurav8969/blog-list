@@ -1,0 +1,21 @@
+### add cybersec
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+    "title":"Cybersec",
+    "author":"GTR",
+    "url":"http://localhost:6969",
+    "likes":9000
+}
+
+### add system programming
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+    "title":"System Programming",
+    "author":"Gaurav Tiwari",
+    "url":"http://localhost:6969",
+    "likes":6969
+}
