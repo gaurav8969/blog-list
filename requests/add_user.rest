@@ -1,0 +1,19 @@
+### add harsh
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+    "username": "udit8969",
+    "name": "harsh",
+    "password": "1252"
+}
+
+###add yash
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+    "username": "yash8969",
+    "name": "yash",
+    "password": "4252"
+}
