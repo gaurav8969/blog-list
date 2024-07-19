@@ -1,0 +1,2 @@
+//for resetting the testing database
+POST http://localhost:3003/api/testing/reset
