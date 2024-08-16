@@ -10,6 +10,31 @@ usersRouter.get('/', async (request, response) => {
   response.json(users);
 });
 
+usersRouter.get('/:id', async (request, response) => {
+  try {
+    const user = await User
+      .findById(request.params.id)
+      .populate('blogs', { title: 1, author: 1, url: 1, id: 1, likes:1 })
+      .populate({
+        path: 'comments',
+        select: { content: 1, blog: 1 },
+        populate: {
+          path: 'blog',
+          select: { title: 1, author: 1, url: 1 }
+        }
+      });
+
+    if (user) {
+      response.json(user);
+    } else {
+      response.status(404).json({ error: 'User not found' });
+    }
+  } catch (error) {
+    console.error(error);
+    response.status(400).json({ error: 'malformatted id' });
+  }
+});
+
 usersRouter.post('/', async (request, response) => {
   const { username, name, password } = request.body;
 

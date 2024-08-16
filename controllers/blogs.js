@@ -1,8 +1,5 @@
-const mongoose = require('mongoose');
 const blogsRouter = require('express').Router();
-const assert = require('node:assert');
 const Blog = require('../models/blog');
-const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const { getTokenFrom, userExtractor } = require('../utils/middleware');
 const userHelper = require('../utils/user_helper');
@@ -15,16 +12,28 @@ blogsRouter.get('/', async (request, response) => {
   response.json(blogs);
 });
 
-blogsRouter.get('/:id', (request, response, next) => {
-  Blog.findById(request.params.id)
-    .then(person => {
-      if(person){
-        response.json(person);
-      }else{
-        response.status(404).end();
-      }
-    })
-    .catch(error => next(error));
+blogsRouter.get('/:id', async (request, response, next) => {
+  try {
+    const blog = await Blog
+      .findById(request.params.id)
+      .populate('user', { username: 1, name: 1 })
+      .populate({
+        path: 'comments',
+        select: { content: 1, user: 1 },
+        populate: {
+          path: 'user',
+          select: { name: 1, username: 1 }
+        }
+      });
+
+    if (blog) {
+      response.json(blog);
+    } else {
+      response.status(404).end();
+    }
+  } catch (error) {
+    next(error);
+  }
 });
 
 blogsRouter.post('/', userExtractor, async (request, response, next) => {
